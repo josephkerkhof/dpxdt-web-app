@@ -1,3 +1,5 @@
+
+"use strict"
 // requiring packages
 const express = require('express')
 const shell = require('shelljs')
@@ -16,8 +18,16 @@ router.use(function (req,res,next) {
 // getting to the dpxdt directory
 shell.cd('../dpxdt')
 
-router.get('/', function (req, res){
+app.get('/', function (req, res){
     res.sendFile(path + 'index.html')
+})
+
+app.get('/submission', function(req, res){
+    let liveSite = req.param('liveSite')
+    let stagingSite = req.param('stagingSite')
+    console.log("liveSite: " + liveSite)
+    console.log("stagingSite: " + stagingSite)
+    res.send()
 })
 
 app.use('/', router)

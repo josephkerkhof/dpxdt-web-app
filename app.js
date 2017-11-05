@@ -5,13 +5,13 @@ const express = require('express')
 const shell = require('shelljs')
 const https = require('https')
 const xml2js = require('xml2js')
-const parser = new xml2js.Parser()
 
 // definitions
 const app = express()
 const router = express.Router()
 const port = 80
 const path = __dirname + '/views/'
+const parser = new xml2js.Parser()
 
 router.use(function (req,res,next) {
     console.log("/" + req.method);
@@ -47,7 +47,11 @@ app.get('/submission', function(req, res){
 
             GETRes.on('end', function() {
                 parser.parseString(xml, function(err, sitemap) {
-                    res.send('JS object of response: ' + JSON.stringify(sitemap))
+                    let urls = Array()
+                    let urlset = sitemap.urlset.url
+                    for(var i=0; i<urlset.length; i++){
+                        urls.push(urlset[i].loc[0])
+                    }
                 })
             })
 

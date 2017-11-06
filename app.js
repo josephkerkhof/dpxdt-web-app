@@ -5,7 +5,7 @@ const express = require('express')
 const shell = require('shelljs')
 const https = require('https')
 const xml2js = require('xml2js')
-const io = require('socket.io')(https)
+const fs = require('fs')
 
 // definitions
 const app = express()
@@ -26,26 +26,20 @@ app.get('/', function (req, res){
     res.sendFile(path + 'index.html')
 })
 
-app.get('/submission', function(req, res){
-    let liveSite = req.param('site')
+app.get('/submission', function(req, res, next){
+    let site = req.param('site')
     let build_id = req.param('build_id')
-    liveSite = liveSite.replace(/(^\w+:|^)\/\//, '') // striping out the http(s)
-    // let stagingSite = 'staging.' + liveSite
-    console.log("liveSite: " + liveSite)
-    // console.log("stagingSite: " + stagingSite)
+    site = site.replace(/(^\w+:|^)\/\//, '') // striping out the http(s)
+    console.log("site: " + site)
     https.get({
-        hostname: liveSite,
+        hostname: site,
         port: 443,
         path: '/page-sitemap.xml',
         agent: false  // create a new agent just for this one request
       }, function(GETRes) {
-          console.log('Response code for GET on ' + liveSite + ': ' + GETRes.statusCode)
+          console.log('Response code for GET on ' + site + ': ' + GETRes.statusCode)
 
           if(GETRes.statusCode == 200){ // sitemap was found
-            // sending a webpage back to the user
-            res.sendFile(path + 'progress.html')
-
-            // continuing execusion
             let xml = '';
             GETRes.on('data', function(chunk) { // concatenating all the XML data
                 xml += chunk
@@ -68,15 +62,34 @@ app.get('/submission', function(req, res){
                         staging_urls.push('staging.' + live_urls[i])
                     }
 
-                    // running the pages thru the dpxdt compare
+                    // parsing to a combined array
+                    let pages = Array()
                     for(let i=0; i<live_urls.length; i++){
-                        let command = './run_url_pair_diff.sh \
-                        --upload_build_id=' + build_id + ' \
-                        http://' + live_urls[i] + ' \
-                        http://' + staging_urls[i]
-                        console.log(command)
-                        shell.exec(command)
+                        let name = live_urls[i].replace(site, '')
+                        let temp = {
+                            "name": name,
+                            "run_url": live_urls[i],
+                            "run_config": {
+                                "viewportSize": {
+                                    "width": 1024,
+                                    "height": 768
+                                }
+                            },
+                            "ref_url": staging_urls[i],
+                            "ref_config": {
+                                "viewportSize": {
+                                    "width": 1024,
+                                    "height": 768
+                                }
+                            }
+                        }
+                        pages.push(temp)
                     }
+
+                    let filePath = __dirname + '/json/' + site + '.json'
+                    fs.writeFileSync(filePath, JSON.stringify(pages))
+
+                    
                 })
             })
 
@@ -89,11 +102,6 @@ app.get('/submission', function(req, res){
           console.log('Error in https.get: ' + err)
       })
 })
-
-// doing stuff with socket.io
-io.on('connection', function(socket){
-    console.log('a user connected');
-});
 
 parser.on('error', function(e){ console.log('Parser error: ' +  e) })
 

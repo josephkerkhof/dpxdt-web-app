@@ -87,9 +87,24 @@ app.get('/submission', function(req, res, next){
                     }
 
                     let filePath = __dirname + '/json/' + site + '.json'
-                    fs.writeFileSync(filePath, JSON.stringify(pages))
+                    // checks if the file exists
+                    if(fs.existsSync(filePath)){
+                        console.log('Existing file found at: ' + filePath)
+                        fs.unlinkSync(filePath) // deletes the file
+                        console.log('Deleted file: ' + filePath)
+                    }
+                    fs.writeFileSync(filePath, JSON.stringify(pages)) // writes a new file
+                    console.log('File written: ' + filePath)
 
-                    
+                    let command = './run_diff_my_urls.sh \
+                    --upload_build_id=' + build_id + ' \
+                    --upload_release_name="' + new Date().toISOString() + '" \
+                    --release_cut_url=localhost:5000 \
+                    --tests_json_path=../web-app/json/' + site + '.json'
+                    console.log(command)
+                    shell.exec(command)
+
+                    res.send('Your site compare was submitted successfully. You can view the results as they come in <a href="http://dpxdt.mio.uwosh.edu:5000">here</a>')
                 })
             })
 

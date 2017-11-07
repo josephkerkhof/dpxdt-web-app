@@ -68,14 +68,14 @@ app.get('/submission', function(req, res, next){
                         let name = live_urls[i].replace(site, '')
                         let temp = {
                             "name": name,
-                            "run_url": live_urls[i],
+                            "run_url": 'http://' + staging_urls[i],
                             "run_config": {
                                 "viewportSize": {
                                     "width": 1024,
                                     "height": 768
                                 }
                             },
-                            "ref_url": staging_urls[i],
+                            "ref_url": 'http://' + live_urls[i],
                             "ref_config": {
                                 "viewportSize": {
                                     "width": 1024,

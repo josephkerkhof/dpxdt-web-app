@@ -123,7 +123,7 @@ app.get('/submission', function(req, res, next){
                     console.log(command)
                     shell.exec(command)
 
-                    res.send('Your site compare was submitted successfully. You can view the results as they come in <a href="http://dpxdt.mio.uwosh.edu:5000">here</a>')
+                    res.send('Your site compare was submitted successfully. You can view the results as they come in <a href="http://dpxdt.mio.uwosh.edu:5000/build?id=' + build_id + '">here</a>')
                 })
             })
 

@@ -6,6 +6,7 @@ const shell = require('shelljs')
 const https = require('https')
 const xml2js = require('xml2js')
 const fs = require('fs')
+const nodePath = require('path')
 
 // definitions
 const app = express()
@@ -66,8 +67,8 @@ app.get('/submission', function(req, res, next){
                     let pages = Array()
                     for(let i=0; i<live_urls.length; i++){
                         let name = live_urls[i].replace(site, '')
-                        let temp = {
-                            "name": name,
+                        let tempDesktop = {
+                            "name": 'Desktop - ' + name,
                             "run_url": 'http://' + staging_urls[i],
                             "run_config": {
                                 "viewportSize": {
@@ -83,7 +84,25 @@ app.get('/submission', function(req, res, next){
                                 }
                             }
                         }
-                        pages.push(temp)
+                        let tempMobile = {
+                            "name": 'Mobile - ' + name,
+                            "run_url": 'http://' + staging_urls[i],
+                            "run_config": {
+                                "viewportSize": {
+                                    "width": 320,
+                                    "height": 768
+                                }
+                            },
+                            "ref_url": 'http://' + live_urls[i],
+                            "ref_config": {
+                                "viewportSize": {
+                                    "width": 320,
+                                    "height": 768
+                                }
+                            }
+                        }
+                        pages.push(tempDesktop)
+                        pages.push(tempMobile)
                     }
 
                     let filePath = __dirname + '/json/' + site + '.json'
@@ -119,6 +138,6 @@ app.get('/submission', function(req, res, next){
 })
 
 parser.on('error', function(e){ console.log('Parser error: ' +  e) })
-
+app.use('/img', express.static(nodePath.join(__dirname, 'views/img'))) // hosting the images directory as a static resource
 app.use('/', router)
 app.listen(port, () => console.log('Example app listening on port ' + port + '!'))

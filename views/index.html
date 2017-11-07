@@ -6,6 +6,9 @@
 
   <title>Pixel Compare</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">  
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
   <![endif]-->
@@ -15,8 +18,21 @@
   <div class="row">
     <div class="container">
       <form action="submission" method="GET">
-        <span>Enter the site URL: </span><input type="text" name="site"><br />
-        <span>Enter the build ID: </span><input type="text" name="build_id"><br />
+        <span>Enter the site URL: </span><input placeholder="ex. admissions.uwosh.edu" type="text" style="width: 250px" name="site"><br />
+        <span>Enter the build ID: </span><input placeholder="ex. 1" type="text" style="width: 50px" name="build_id"><br />
+        <div id="buildIDAccordion" data-children=".item">
+          <div class="item">
+            <a data-toggle="collapse" data-parent="#buildIDAccordion" href="#buildIDAccordion1" aria-expanded="true" aria-controls="buildIDAccordion1">
+              Don't know what a build ID is?
+            </a>
+            <div id="buildIDAccordion1" class="collapse" role="tabpanel">
+              <p class="mb-3">
+                After you have created a build at <a href="http://dpxdt.mio.uwosh.edu:5000">dpxdt.mio.uwosh.edu:5000</a>, click into the build you created and look at the URL in your browser. You should see a <code>?id=</code> in your browser. The number that follows the <code>?id=</code> is your build ID.<br />
+                <img src="/img/buildID.png" style="width: 1200px">
+              </p>
+            </div>
+          </div>
+        </div>
         <input type="submit" value="Submit">
       </form>
     </div>

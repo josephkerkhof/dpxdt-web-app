@@ -149,7 +149,7 @@ app.get('/submission', function(req, res, next){
         } else{
             // build id doesn't exist
             console.log('Build number ' + build_id + ' wasn\'t found on the dpxdt server.')
-            res.send('Build number ' + build_id + ' wasn\'t found on the dpxdt server. Go to <a target="_blank" href="dpxdt.mio.uwosh.edu:5000">dpxdt.mio.uwosh.edu:5000</a> and set up or find a valid build. Click <a href="dpxdt.mio.uwosh.edu">here</a> to start over.')
+            res.send('Build number ' + build_id + ' wasn\'t found on the dpxdt server. Go to <a target="_blank" href="http://dpxdt.mio.uwosh.edu:5000">dpxdt.mio.uwosh.edu:5000</a> and set up or find a valid build. Click <a href="http://dpxdt.mio.uwosh.edu">here</a> to start over.')
         }
       });
 })

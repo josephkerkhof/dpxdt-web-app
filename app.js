@@ -137,6 +137,9 @@ app.get('/submission', function(req, res, next){
                             res.send('Your site compare was submitted successfully. You can view the results as they come in <a href="http://dpxdt.mio.uwosh.edu:5000/build?id=' + build_id + '">here</a>')
                         })
                     })
+                  } else if(GETRes.statusCode == 504){ // timeout
+                    console.log('Sitemap request timed out')
+                    res.send('The request to get the sitemap timed out. You can try again by <a href="http://dpxdt.mio.uwosh.edu">starting over</a>. If the problem persists, please contact <a href="mailto:kerkhofj@uwosh.edu">Joseph</a>.')
                   } else{ // sitemap was not found
                       res.send('Sitemap was not present. Please check the site\'s settings and validate that the sitemap exists.')
                   }

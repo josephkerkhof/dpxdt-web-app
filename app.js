@@ -137,8 +137,6 @@ app.get('/submission', function(req, res, next){
                             res.send('Your site compare was submitted successfully. You can view the results as they come in <a href="http://dpxdt.mio.uwosh.edu:5000/build?id=' + build_id + '">here</a>')
                         })
                     })
-        
-                    // res.sendFile(path + 'submission.html')
                   } else{ // sitemap was not found
                       res.send('Sitemap was not present. Please check the site\'s settings and validate that the sitemap exists.')
                   }
